@@ -21,7 +21,6 @@
 
             table {
                 width: 100%;
-                max-width: 600px;
                 border-collapse: collapse;
             }
 
@@ -53,7 +52,7 @@
                 // Get the button and loading indicator elements
                 const submitButton = document.getElementById('submit-button');
                 const loadingIndicator = document.getElementById('loading-indicator');
-                const resultsTable = document.getElementById('results-table');
+                const resultsTable = document.getElementById('tables-container');
                 const errorMessages = document.getElementById('error-messages');
                 const uploadForm = document.getElementById('upload-form');
 
@@ -100,11 +99,11 @@
                 </form>
             </section>
 
-            <section id="body-container">
+            <section id="tables-container">
                 {% for i in range(results|length) %}
                     <h2>{{ filenames[i] }}</h2>
                     <table>
-                        <tbody id="results-table">
+                        <tbody>
                             {% for suggestion in results[i] %}
                                 <tr>
                                     <td>Line {{ suggestion['line'] }}: {{ suggestion['type'] }}</td>
