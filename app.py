@@ -100,34 +100,40 @@ def code_evaluator():
 def evaluate():
     if request.method == "POST":
         try:
-            # TODO: process multiple files at once
-            file = request.files["files"]
-            if not file:
-                raise Exception("No file uploaded")
+            files = request.files.getlist("files")
+            filenames = []
+            results = []
+            print(files)
 
-            filename = file.filename
+            for file in files:
+                if not file:
+                    raise Exception("No file uploaded")
 
-            # read text from file
-            data = file.read()
-            data = data.decode("utf-8")  # convert bytes to text
+                filename = file.filename
+                filenames.append(filename)
 
-            # system_prompt = 'Replicate results for any coding language like pylint does on python code or jshint does on js. Each suggestion should be an object with keys "line", "category", "suggestion".'
+                # read text from file
+                data = file.read()
+                data = data.decode("utf-8")  # convert bytes to text
 
-            response = client.chat.completions.create(model="gpt-3.5-turbo",
-            temperature=0,
-            messages=[
-                {
-                    "role": "system",
-                    "content": 'Analyze the following python code. Include all suggestions as a JSON-compatible list of objects each with keys "line": X, "type": Y, "suggestion": Z }'
-                },
-                {
-                    "role": "user",
-                    "content": data
-                }
-            ])
-            results = json.loads(response.choices[0].message.content)
-            print(type(results), results)
-            return render_template("evaluate.html", filename=filename, results=results)
+                # system_prompt = 'Replicate results for any coding language like pylint does on python code or jshint does on js. Each suggestion should be an object with keys "line", "category", "suggestion".'
+
+                response = client.chat.completions.create(model="gpt-3.5-turbo",
+                    temperature=0,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": 'Analyze the following python code. Include all suggestions as a JSON-compatible list of objects each with keys "line": X, "type": Y, "suggestion": Z }'
+                        },
+                        {
+                            "role": "user",
+                            "content": data
+                        }
+                    ])
+                data = json.loads(response.choices[0].message.content)
+                print(type(data), data)
+                results.append(data)
+            return render_template("evaluate.html", filenames=filenames, results=results)
         except Exception as e:
             print(e)
             handle_exception(e)
