@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel=stylesheet href="{{ url_for('static', filename='main.css') }}">
         <title>Evaluate</title>
         <style>
             body {
@@ -71,6 +72,10 @@
 
     <body>
         <header>
+            <nav>
+                <a href="/logout">Logout</a>
+            </nav>
+
             <section id="error-messages">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
@@ -85,9 +90,8 @@
         </header>
 
         <main>
-            <h1>Evaluate</h1>
             <section>
-                <h2>Upload a file: {{ filename }}</h2>
+                <h2>Upload a file</h2>
                 <form action="/evaluate" method="post" enctype="multipart/form-data">
                     <input name="files" type="file" multiple="true"></input>
                     <input id="submit-button" type="submit" value="Submit"></input>
@@ -99,20 +103,22 @@
                 </div>
             </section>
 
+            <section id="body-container">
+                <h2>{{ filename }}</h2>
+                <table>
+                    <tbody id="results-table">
+                            {% for result in results %}
+                        <tr>
+                            <td>Line {{ result['line'] }}: {{ result['type'] }}</td>
+                        </tr>
 
-            <table>
-                <tbody id="results-table">
-                        {% for result in results %}
-                    <tr>
-                        <td>Line {{ result['line'] }}: {{ result['type'] }}</td>
-                    </tr>
-
-                    <tr style="background-color: aliceblue; margin-bottom: 15px">
-                        <td>{{ result['suggestion'] }}</td>
-                    </tr>
-                        {% endfor %}
-                </tbody>
-            </table>
+                        <tr style="background-color: aliceblue; margin-bottom: 15px">
+                            <td>{{ result['suggestion'] }}</td>
+                        </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </section>
         </main>
     </body>
 </html>
