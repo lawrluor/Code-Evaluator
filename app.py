@@ -58,7 +58,10 @@ def handle_exception(e):
         else:
             flash("Error occurred. See https://help.openai.com/en/articles/6891839-api-error-code-guidance")
     else:
-        flash("An error occurred.")
+        if e:
+            flash(str(e))
+        else:
+            flash("An error occurred.")
 
 @app.route("/", methods=("GET", "POST"))
 def index():
@@ -86,7 +89,6 @@ def code_evaluator():
             # data = json.loads(response['choices'][0]['message']['content'])
             return render_template("code_evaluator.html", result=data)
         except Exception as e:
-            print(e)
             handle_exception(e)
             return render_template("code_evaluator.html")
     else:
@@ -100,6 +102,9 @@ def evaluate():
         try:
             # TODO: process multiple files at once
             file = request.files["files"]
+            if not file:
+                raise Exception("No file uploaded")
+
             filename = file.filename
 
             # read text from file

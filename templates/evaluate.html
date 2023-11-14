@@ -19,12 +19,6 @@
                 margin-bottom: 1rem;
             }
 
-            button {
-                padding: 0.5rem 1rem;
-                font-size: 1rem;
-                margin-bottom: 2rem;
-            }
-
             table {
                 width: 100%;
                 max-width: 600px;
@@ -45,6 +39,13 @@
                 font-size: 1.5rem;
                 margin-bottom: 1rem;
             }
+
+            #submit-button-disabled {
+                background-color: #ccc; /* Grey background */
+                color: #767676; /* Dim the text color */
+                border: 1px solid #999; /* Optional: Add a border to make it look "flat" */
+                cursor: not-allowed; /* Show a 'not-allowed' cursor when hovered */
+            }
         </style>
 
         <script>
@@ -54,11 +55,12 @@
                 const loadingIndicator = document.getElementById('loading-indicator');
                 const resultsTable = document.getElementById('results-table');
                 const errorMessages = document.getElementById('error-messages');
+                const uploadForm = document.getElementById('upload-form');
 
-                // Attach a click event listener to the button
-                submitButton.addEventListener('click', function () {
-                    loadingIndicator.style.display = 'block';  // Show the loading indicator
-                    submitButton.style.display = 'none';
+                uploadForm.addEventListener('submit', function (e) {
+                    submitButton.disabled = true;
+                    submitButton.value = 'Uploading & Processing Files...';
+                    submitButton.id = 'submit-button-disabled';
                     resultsTable.style.display = 'none';
                     errorMessages.style.display = 'none';
 
@@ -67,6 +69,8 @@
                     // here after the operation is complete using the request callback
                 });
             });
+
+
         </script>
     </head>
 
@@ -92,15 +96,10 @@
         <main>
             <section>
                 <h2>Upload a file</h2>
-                <form action="/evaluate" method="post" enctype="multipart/form-data">
+                <form id="upload-form" action="/evaluate" method="post" enctype="multipart/form-data">
                     <input name="files" type="file" multiple="true"></input>
                     <input id="submit-button" type="submit" value="Submit"></input>
                 </form>
-
-                <!-- Loading indicator -->
-                <div id="loading-indicator" style="display:none;">
-                    <i class="fas fa-spinner fa-spin"></i> Uploading & Processing Files...
-                </div>
             </section>
 
             <section id="body-container">
