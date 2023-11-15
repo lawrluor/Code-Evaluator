@@ -58,7 +58,7 @@
 
                 uploadForm.addEventListener('submit', function (e) {
                     submitButton.disabled = true;
-                    submitButton.value = 'Uploading & Processing Files...';
+                    submitButton.value = 'Uploading & Analyzing Files...';
                     submitButton.id = 'submit-button-disabled';
                     resultsTable.style.display = 'none';
                     errorMessages.style.display = 'none';
@@ -76,31 +76,37 @@
             <nav>
                 <a href="/logout">Logout</a>
             </nav>
-
-            <section id="error-messages">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    <ul class=flashes>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                    </ul>
-                    {% endif %}
-                {% endwith %}
-            </section>
         </header>
 
         <main>
             <section>
-                <h2>Upload a file</h2>
+                <h2>Upload Files</h2>
                 <form id="upload-form" action="/evaluate" method="post" enctype="multipart/form-data">
                     <input name="files" type="file" multiple></input>
                     <input id="submit-button" type="submit" value="Submit"></input>
                 </form>
             </section>
 
+            <section id="error-messages">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="flashes">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </section>
+
             <section id="tables-container">
-                {% for i in range(results|length) %}
+                {% if filenames|length == 1 %}
+                    <h2>Analyzed 1 file</h2>
+                {% elif filenames|length > 0 %}
+                    <h2>Analyzed {{ filenames|length }} files</h2>
+                {% endif %}
+
+                {% for i in range(filenames|length) %}
                     <h2>{{ filenames[i] }}</h2>
                     <table>
                         <tbody>

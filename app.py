@@ -107,7 +107,7 @@ def evaluate():
 
             for file in files:
                 if not file:
-                    raise Exception("No file uploaded")
+                    raise Exception("No file(s) uploaded")
 
                 filename = file.filename
                 filenames.append(filename)
