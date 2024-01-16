@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 import json
 from flask import Flask, redirect, render_template, request, url_for, flash
 
@@ -7,9 +10,8 @@ from flask_login import login_user, login_required, logout_user, current_user, L
 from flask_sqlalchemy import SQLAlchemy
 
 import openai
-from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
