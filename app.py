@@ -96,6 +96,10 @@ def code_evaluator():
     else:
         return render_template("code_evaluator.html")
 
+@app.route("/dashboard", methods=("GET", "POST"))
+@login_required
+def dashboard():
+    return render_template("dashboard.html")
 
 @app.route("/evaluate", methods=("GET", "POST"))
 @login_required
