@@ -1,15 +1,14 @@
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-import json
 from flask import Flask, redirect, render_template, request, url_for, flash
-
-from werkzeug.security import check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
+import os
+import json
 import openai
+from dotenv import load_dotenv
+
+load_dotenv()
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -24,15 +23,37 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# TODO: Import from models.py
+# 'extend_existing' allows redefining tables and columns
 class User(UserMixin, db.Model):
+    __tablename__ = 'user'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
-    password = db.Column(db.String(40), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password, method='scrypt')
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+class Analysis(db.Model):
+    __tablename__ = 'analysis'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
+    filename = db.Column(db.String(255), nullable=False)
+    data = db.Column(db.JSON, nullable=False)  # TODO: change to JSONB?
+
 
 @login_manager.user_loader
 def load_user(user_id):
+    # TODO: Fix to Session.get?
+    # LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
     return User.query.get(int(user_id))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -102,7 +123,8 @@ def code_evaluator():
 @app.route("/dashboard", methods=("GET", "POST"))
 @login_required
 def dashboard():
-    
+    data = Analysis.query.filter_by(user_id=current_user.id).all()
+    print(data)
     return render_template("dashboard.html")
 
 @app.route("/evaluate", methods=("GET", "POST"))
