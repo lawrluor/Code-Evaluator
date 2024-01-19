@@ -24,6 +24,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+# TODO: Import from models.py
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
@@ -101,6 +102,7 @@ def code_evaluator():
 @app.route("/dashboard", methods=("GET", "POST"))
 @login_required
 def dashboard():
+    
     return render_template("dashboard.html")
 
 @app.route("/evaluate", methods=("GET", "POST"))
