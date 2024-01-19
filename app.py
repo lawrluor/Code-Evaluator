@@ -162,8 +162,18 @@ def evaluate():
                         }
                     ])
                 data = json.loads(response.choices[0].message.content)
-                print(type(data), data)
+
+                # save to results to display on template
                 results.append(data)
+
+                # save to database
+                analysis = Analysis(user_id=current_user.id,
+                                    filename=filename, data=data,
+                                    created_at=db.func.now(),
+                                    updated_at=db.func.now()
+                                    )
+                db.session.add(analysis)
+                db.session.commit()
             return render_template("evaluate.html", filenames=filenames, results=results)
         except Exception as e:
             print(e)
