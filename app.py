@@ -124,8 +124,7 @@ def code_evaluator():
 @login_required
 def dashboard():
     data = Analysis.query.filter_by(user_id=current_user.id).all()
-    print(data)
-    return render_template("dashboard.html")
+    return render_template("dashboard.html", evaluations=data)
 
 @app.route("/evaluate", methods=("GET", "POST"))
 @login_required
