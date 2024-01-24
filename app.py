@@ -173,6 +173,7 @@ def evaluate():
                                     )
                 db.session.add(analysis)
                 db.session.commit()
+                print(results)
             return render_template("evaluate.html", filenames=filenames, results=results)
         except Exception as e:
             print(e)

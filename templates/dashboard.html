@@ -32,8 +32,9 @@
 				{% if evaluations %}
 					<ul>
 						{% for evaluation in evaluations %}
-							<li><a href="/evaluate/{{ evaluation.id }}">{{ evaluation.created_at }} {{ evaluation.filename }}</a></li>
-							<div>{{ evaluation.data }}</div>
+							{% with table_results=evaluation.data, filename=evaluation.filename %}
+									{% include 'evaluation_table.html' %}
+							{% endwith %}
 						{% endfor %}
 					</ul>
 				{% else %}
