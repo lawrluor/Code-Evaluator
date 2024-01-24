@@ -13,11 +13,9 @@ load_dotenv()
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Using SQLite for simplicity
-# postgresql://code_eval_openai_user:KYfgKGaHZrs55kFnAlq1LHv95jdu75hn@dpg-cmjg4j21hbls73cjg8i0-a.ohio-postgres.render.com/code_eval_openai
-# See https://www.youtube.com/watch?v=IBfj_0Zf2Mo for guide on connecting SQL server on Render
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 
 db = SQLAlchemy(app)
