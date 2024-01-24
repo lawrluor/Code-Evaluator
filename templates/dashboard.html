@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+			<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+			<title>Dashboard</title>
+	</head>
+
+	<body>
+		<header>
+			<nav>
+				<a href="/logout">Logout</a>
+				<a href="/evaluate">Evaluate</a>
+			</nav>
+
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					<ul>
+					{% for message in messages %}
+						<li>{{ message }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			{% endwith %}
+		</header>
+
+		<main>
+			<h1>Dashboard</h1>
+			<p>Hi, {{ current_user.username }}!</p>
+
+			<section>
+				<h2>Evaluations</h2>
+				{% if evaluations %}
+					<ul>
+						{% for evaluation in evaluations %}
+							<li><a href="/evaluate/{{ evaluation.id }}">{{ evaluation.created_at }} {{ evaluation.filename }}</a></li>
+							<div>{{ evaluation.data }}</div>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p>You have no evaluations.</p>
+				{% endif %}
+			</section>
+		</main>
+	</body>
+</html>
