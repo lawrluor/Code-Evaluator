@@ -8,6 +8,8 @@ import json
 import openai
 from dotenv import load_dotenv
 
+from datetime import datetime
+
 load_dotenv()
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -92,38 +94,21 @@ def handle_exception(e):
 def index():
     return redirect(url_for("evaluate"))
 
-@app.route("/code_evaluator", methods=("GET", "POST"))
-def code_evaluator():
-    if request.method == "POST":
-        try:
-            response = client.chat.completions.create(model="gpt-3.5-turbo",
-            temperature=0,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a coding expert that will evaluate code and return revised code based on best practices, code quality, efficiency, and readability. Feel free to also add comments in the code."
-                },
-                {
-                    "role": "user",
-                    "content": request.form["prompt"]
-                }
-            ])
-
-            # converts result string that looks like a Python dictionary into an actual Python dictionary/code
-            data = response.choices[0].message.content
-            # data = json.loads(response['choices'][0]['message']['content'])
-            return render_template("code_evaluator.html", result=data)
-        except Exception as e:
-            handle_exception(e)
-            return render_template("code_evaluator.html")
-    else:
-        return render_template("code_evaluator.html")
-
 @app.route("/dashboard", methods=("GET", "POST"))
 @login_required
 def dashboard():
     data = Analysis.query.filter_by(user_id=current_user.id).all()
-    return render_template("dashboard.html", evaluations=data)
+
+    # Convert analysis objects to dictionaries with datetime converted to string
+    evaluations = []
+    for analysis in data:
+        dict = analysis.__dict__
+        corrected_hour = ((dict["created_at"].hour - 8) % 24)
+        corrected_tz = dict["created_at"].replace(tzinfo=None, hour=(corrected_hour))
+        dict["created_at"] = corrected_tz.strftime('%x %X %p')
+        evaluations.append(dict)
+
+    return render_template("dashboard.html", evaluations=evaluations)
 
 @app.route("/evaluate", methods=("GET", "POST"))
 @login_required

@@ -31,7 +31,7 @@
 				{% if evaluations %}
 					<ul>
 						{% for evaluation in evaluations %}
-							{% with table_results=evaluation.data, filename=evaluation.filename %}
+							{% with table_results=evaluation.data, filename=evaluation.filename, timestamp=evaluation.created_at %}
 								{% include 'evaluation_table.html' %}
 							{% endwith %}
 						{% endfor %}
