@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 	<head>
-			<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-			<title>Dashboard</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+		<title>Dashboard</title>
 	</head>
 
 	<body>
@@ -24,8 +24,7 @@
 		</header>
 
 		<main>
-			<h1>Dashboard</h1>
-			<p>Hi, {{ current_user.username }}!</p>
+			<h1>{{ current_user.username }}'s Dashboard</h1>
 
 			<section>
 				<h2>Evaluations</h2>
@@ -33,7 +32,7 @@
 					<ul>
 						{% for evaluation in evaluations %}
 							{% with table_results=evaluation.data, filename=evaluation.filename %}
-									{% include 'evaluation_table.html' %}
+								{% include 'evaluation_table.html' %}
 							{% endwith %}
 						{% endfor %}
 					</ul>

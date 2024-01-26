@@ -11,26 +11,6 @@
                 margin-bottom: 1rem;
             }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th, td {
-                border: 1px solid #ddd;
-                padding: 0.5rem 1rem;
-                text-align: left;
-            }
-
-            th {
-                background-color: #f2f2f2;
-            }
-
-            caption {
-                font-size: 1.5rem;
-                margin-bottom: 1rem;
-            }
-
             #submit-button-disabled {
                 background-color: #ccc; /* Grey background */
                 color: #767676; /* Dim the text color */
@@ -50,7 +30,7 @@
 
                 uploadForm.addEventListener('submit', function (e) {
                     submitButton.disabled = true;
-                    submitButton.value = 'Uploading & Analyzing Files...';
+                    submitButton.value = 'Uploading & Analyzing Files... this may take several minutes.';
                     submitButton.id = 'submit-button-disabled';
                     resultsTable.style.display = 'none';
                     errorMessages.style.display = 'none';

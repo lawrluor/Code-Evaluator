@@ -2,14 +2,14 @@
 	<h2>{{ filename }}</h2>
 
 	<tbody>
-			{% for suggestion in table_results %}
-					<tr>
-							<td>Line {{ suggestion['line'] }}: {{ suggestion['type'] }}</td>
-					</tr>
+		{% for suggestion in table_results %}
+			<tr class="highlight-row">
+				<td>Line {{ suggestion['line'] }}: {{ suggestion['type'] }}</td>
+			</tr>
 
-					<tr style="background-color: aliceblue; margin-bottom: 15px">
-							<td>{{ suggestion['suggestion'] }}</td>
-					</tr>
-			{% endfor %}
+			<tr>
+				<td>{{ suggestion['suggestion'] }}</td>
+			</tr>
+		{% endfor %}
 	</tbody>
 </table>

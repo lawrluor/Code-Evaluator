@@ -65,10 +65,25 @@ input[type="submit"] {
 li {
   list-style-type: circle;
 }
+
 table {
   margin-top: 15px;
   margin-bottom: 15px;
+  width: 100%;
+  border-collapse: collapse;
 }
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+
+.highlight-row {
+  background-color: aliceblue;
+  margin-bottom: 15px;
+}
+
 .body-container {
   margin-top: 15px;
   margin-bottom: 15px;
