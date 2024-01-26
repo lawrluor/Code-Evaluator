@@ -133,7 +133,6 @@ def evaluate():
             files = request.files.getlist("files")
             filenames = []
             results = []
-            print(files)
 
             for file in files:
                 if not file:
@@ -173,10 +172,8 @@ def evaluate():
                                     )
                 db.session.add(analysis)
                 db.session.commit()
-                print(results)
             return render_template("evaluate.html", filenames=filenames, results=results)
         except Exception as e:
-            print(e)
             handle_exception(e)
             return redirect(url_for("evaluate"))
     else:
