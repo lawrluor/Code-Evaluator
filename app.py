@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, redirect, render_template, request, url_for, flash, session
 from flask_login import login_user, login_required, logout_user, current_user, LoginManager, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -94,10 +94,25 @@ def handle_exception(e):
 def index():
     return redirect(url_for("evaluate"))
 
-@app.route("/dashboard", methods=("GET", "POST"))
+@app.route("/api/deleteEval/<int:id>", methods=["GET", "POST"])
+@login_required
+def delete_eval(id):
+    try:
+        analysis = Analysis.query.filter_by(id=id).first()
+        if analysis:
+            db.session.delete(analysis)
+            db.session.commit()
+        else:
+            raise Exception("Analysis not found")
+    except Exception as e:
+        handle_exception(e)
+    return redirect(url_for("dashboard"))
+
+@app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    data = Analysis.query.filter_by(user_id=current_user.id).all()
+    sort_by = request.args.get("sort_by") if request.args.get("sort_by") else "created_at"
+    data = Analysis.query.filter_by(user_id=current_user.id).order_by(getattr(Analysis, sort_by).desc()).all()  # .limit()
 
     # Convert analysis objects to dictionaries with datetime converted to string
     evaluations = []
@@ -110,7 +125,7 @@ def dashboard():
 
     return render_template("dashboard.html", evaluations=evaluations)
 
-@app.route("/evaluate", methods=("GET", "POST"))
+@app.route("/evaluate", methods=["GET", "POST"])
 @login_required
 def evaluate():
     if request.method == "POST":

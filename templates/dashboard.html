@@ -26,6 +26,12 @@
 		<main>
 			<h1>{{ current_user.username }}'s Dashboard</h1>
 
+			<div>
+				Sort by:
+				<a href="?sort_by=created_at">Timestamp</a> |
+				<a href="?sort_by=filename">Filename</a>
+			</div>
+
 			<section>
 				<h2>Evaluations</h2>
 				{% if evaluations %}
