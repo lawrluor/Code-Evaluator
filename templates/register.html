@@ -9,11 +9,9 @@
     <header>
       {% with messages = get_flashed_messages() %}
         {% if messages %}
-          <ul>
           {% for message in messages %}
-            <li>{{ message }}</li>
+            <h4>{{ message }}</h4>
           {% endfor %}
-          </ul>
         {% endif %}
       {% endwith %}
     </header>
@@ -26,7 +24,7 @@
         <label>Password:</label>
         <input type="password" name="password">
 				<label>Repeat Password:</label>
-        <input type="passwordRepeat" name="passwordRepeat">
+        <input type="password" name="passwordRepeat">
         <input type="submit" value="Login"></input>
       </form>
 
