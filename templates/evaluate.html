@@ -1,92 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel=stylesheet href="{{ url_for('static', filename='main.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="{{ url_for('static', filename='funcs.js') }}"></script>
-        <title>Evaluate</title>
-        <style>
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 1rem;
-            }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel=stylesheet href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='funcs.js') }}"></script>
+    <title>Evaluate</title>
+    <style>
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
 
-            #submit-button-disabled {
-                background-color: #ccc; /* Grey background */
-                color: #767676; /* Dim the text color */
-                border: 1px solid #999; /* Optional: Add a border to make it look "flat" */
-                cursor: not-allowed; /* Show a 'not-allowed' cursor when hovered */
-            }
-        </style>
+      #submit-button-disabled {
+        background-color: #ccc; /* Grey background */
+        color: #767676; /* Dim the text color */
+        border: 1px solid #999; /* Optional: Add a border to make it look "flat" */
+        cursor: not-allowed; /* Show a 'not-allowed' cursor when hovered */
+      }
+    </style>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Get the button and loading indicator elements
-                const submitButton = document.getElementById('submit-button');
-                const loadingIndicator = document.getElementById('loading-indicator');
-                const resultsTable = document.getElementById('tables-container');
-                const errorMessages = document.getElementById('error-messages');
-                const uploadForm = document.getElementById('upload-form');
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get the button and loading indicator elements
+        const submitButton = document.getElementById('submit-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resultsTable = document.getElementById('tables-container');
+        const errorMessages = document.getElementById('error-messages');
+        const uploadForm = document.getElementById('upload-form');
 
-                uploadForm.addEventListener('submit', function (e) {
-                    submitButton.disabled = true;
-                    submitButton.value = 'Uploading & Analyzing Files... this may take several minutes.';
-                    submitButton.id = 'submit-button-disabled';
-                    resultsTable.style.display = 'none';
-                    errorMessages.style.display = 'none';
+        uploadForm.addEventListener('submit', function (e) {
+          submitButton.disabled = true;
+          submitButton.value = 'Uploading & Analyzing Files... this may take several minutes.';
+          submitButton.id = 'submit-button-disabled';
+          resultsTable.style.display = 'none';
+          errorMessages.style.display = 'none';
 
-                    // The page will reload after post request, so the styles will be reset.
-                    // Otherwise, normally we would have to reset the styles for the submit button and the indicator
-                    // here after the operation is complete using the request callback
-                });
-            });
-        </script>
-    </head>
+          // The page will reload after post request, so the styles will be reset.
+          // Otherwise, normally we would have to reset the styles for the submit button and the indicator
+          // here after the operation is complete using the request callback
+        });
+      });
+    </script>
+  </head>
 
-    <body>
-        <header>
-            <nav>
-                <a href="/dashboard">Dashboard</a>
+  <body>
+    <header>
+      <nav>
+        <a href="/dashboard">Dashboard</a>
 				<i style="float: right" class="small-icon fa fa-sign-out" aria-hidden="true" onclick="displayLogoutConfirmation('Are you sure you want to log out?')"></i>
-            </nav>
-        </header>
+      </nav>
+    </header>
 
-        <main>
-            <section>
-                <h2>Upload Files</h2>
-                <form id="upload-form" action="/evaluate" method="post" enctype="multipart/form-data">
-                    <input name="files" type="file" multiple></input>
-                    <input id="submit-button" type="submit" value="Submit"></input>
-                </form>
-            </section>
+    <main>
+      <section>
+        <h2>Upload Files</h2>
+        <form id="upload-form" action="/evaluate" method="post" enctype="multipart/form-data">
+          <input name="files" type="file" multiple></input>
+          <input id="submit-button" type="submit" value="Submit"></input>
+        </form>
+      </section>
 
-            <section id="error-messages">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <div class="flashes">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endwith %}
-            </section>
+      <section id="error-messages">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flashes">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+      </section>
 
-            <section id="tables-container">
-                {% if filenames|length == 1 %}
-                    <h2>Analyzed 1 file</h2>
-                {% elif filenames|length > 0 %}
-                    <h2>Analyzed {{ filenames|length }} files</h2>
-                {% endif %}
+      <section id="tables-container">
+        {% if filenames|length == 1 %}
+          <h2>Analyzed 1 file</h2>
+        {% elif filenames|length > 0 %}
+          <h2>Analyzed {{ filenames|length }} files</h2>
+        {% endif %}
 
-                {% for i in range(filenames|length) %}
-                    {% with table_results=results[i], filename=filenames[i] %}
-                        {% include 'evaluation_table.html' %}
-                    {% endwith %}
-                {% endfor %}
-            </section>
-        </main>
-    </body>
+        {% for i in range(filenames|length) %}
+          {% with table_results=results[i], filename=filenames[i] %}
+            {% include 'evaluation_table.html' %}
+          {% endwith %}
+        {% endfor %}
+      </section>
+    </main>
+  </body>
 </html>
