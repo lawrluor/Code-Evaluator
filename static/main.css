@@ -91,3 +91,9 @@ th, td {
 .flashes {
   color: darkred;
 }
+
+.small-icon {
+  cursor: pointer;
+  color: darkred;
+  margin: 5px;
+}
