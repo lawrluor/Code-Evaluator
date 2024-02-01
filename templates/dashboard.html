@@ -28,8 +28,10 @@
 
 			<div>
 				Sort by:
-				<a href="?sort_by=created_at">Timestamp</a> |
-				<a href="?sort_by=filename">Filename</a>
+				<select id="pageSelect" onchange="redirectToPage()">
+					<option value="created_at">Timestamp</option>
+					<option value="filename">Filename</option>
+				</select>
 			</div>
 
 			<section>
@@ -47,5 +49,13 @@
 				{% endif %}
 			</section>
 		</main>
+
+		<script>
+			function redirectToPage() {
+				var pageSelect = document.getElementById('pageSelect');
+				var selectedValue = pageSelect.options[pageSelect.selectedIndex].value;
+				window.location.href = '/dashboard?sort_by=' + selectedValue;
+			}
+		</script>
 	</body>
 </html>
