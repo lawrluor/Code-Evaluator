@@ -74,13 +74,13 @@
         {% endwith %}
       </section>
 
-      <section id="tables-container">
-        {% if filenames|length == 1 %}
-          <h2>Analyzed 1 file</h2>
-        {% elif filenames|length > 0 %}
-          <h2>Analyzed {{ filenames|length }} files</h2>
-        {% endif %}
+      {% if filenames|length == 1 %}
+        <h2>Analyzed 1 file</h2>
+      {% elif filenames|length > 0 %}
+        <h2>Analyzed {{ filenames|length }} files</h2>
+      {% endif %}
 
+      <section id="tables-container">
         {% for i in range(filenames|length) %}
           {% with table_results=results[i], filename=filenames[i] %}
             {% include 'evaluation_table.html' %}

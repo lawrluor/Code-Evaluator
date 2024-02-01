@@ -106,10 +106,16 @@ def handle_exception(e):
   if type(e) == openai.APIError:
     if e.http_status >= 500:
       flash("The OpenAI API service is temporarily down, please try again later. See https://status.openai.com/")
+    elif e.code == 400:
+      flash("File is too long. Please upload a file with fewer than 4096 tokens.")
     elif e.http_status == 429:
       flash("Too many requests have been made to the OpenAI API, please wait a few minutes and try again. See https://help.openai.com/en/articles/6891839-api-error-code-guidance")
     else:
       flash("Error occurred. See https://help.openai.com/en/articles/6891839-api-error-code-guidance")
+  elif e and e.code == "context_length_exceeded":
+    # Confusingly, this is not an openai.APIError. We should handle it separately.
+    # Error code: 400 - {'error': {'message': "This model's maximum context length is 4097 tokens. However, your messages resulted in 39822 tokens. Please reduce the length of the messages.", 'type': 'invalid_request_error', 'param': 'messages', 'code': 'context_length_exceeded'}}
+    flash("File is too long. Please upload a file with fewer than 4096 tokens. See https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them")
   else:
     if e:
       flash(str(e))
@@ -171,20 +177,18 @@ def evaluate():
         data = file.read()
         data = data.decode("utf-8")  # convert bytes to text
 
-        # system_prompt = 'Replicate results for any coding language like pylint does on python code or jshint does on js. Each suggestion should be an object with keys "line", "category", "suggestion".'
-
         response = client.chat.completions.create(model="gpt-3.5-turbo",
-          temperature=0,
-          messages=[
-            {
-              "role": "system",
-              "content": PROMPT
-            },
-            {
-              "role": "user",
-              "content": data
-            }
-          ])
+                                                  temperature=0,
+                                                  messages=[
+                                                    {
+                                                      "role": "system",
+                                                      "content": PROMPT
+                                                    },
+                                                    {
+                                                      "role": "user",
+                                                      "content": data
+                                                    }
+                                                  ])
 
         # Note: There is a maximum response length per file of 4096 tokens.
         # In one test, this resulted in 12857 characters, 1309 words, 609 lines
