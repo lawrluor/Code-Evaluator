@@ -3,14 +3,15 @@
 	<head>
 		<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="{{ url_for('static', filename='funcs.js') }}"></script>
 		<title>Dashboard</title>
 	</head>
 
 	<body>
 		<header>
 			<nav>
-				<a href="/logout">Logout</a>
 				<a href="/evaluate">Evaluate</a>
+				<i style="float: right" class="small-icon fa fa-sign-out" aria-hidden="true" onclick="displayLogoutConfirmation('Are you sure you want to log out?')"></i>
 			</nav>
 
 			{% with messages = get_flashed_messages() %}
@@ -25,7 +26,7 @@
 		</header>
 
 		<main>
-			<h1>{{ current_user.username }}'s Dashboard</h1>
+			<h1>{{ current_user.username }}'s Evaluations</h1>
 
 			<div>
 				Sort by:
@@ -36,7 +37,6 @@
 			</div>
 
 			<section>
-				<h2>All Evaluations</h2>
 				{% if evaluations %}
 					<ul>
 						{% for evaluation in evaluations %}

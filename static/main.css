@@ -92,8 +92,14 @@ th, td {
   color: darkred;
 }
 
-.small-icon {
+.small-icon-danger {
   cursor: pointer;
   color: darkred;
+  margin: 5px;
+}
+
+.small-icon {
+  cursor: pointer;
+  color: #10a37f;
   margin: 5px;
 }
