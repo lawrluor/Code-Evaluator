@@ -28,6 +28,7 @@
 		<main>
 			<h1>{{ current_user.username }}'s Evaluations</h1>
 
+			{% if evaluations %}
 			<div>
 				Sort by:
 				<select id="pageSelect" onchange="redirectToPage()">
@@ -35,6 +36,7 @@
 					<option value="filename">Filename</option>
 				</select>
 			</div>
+			{% endif %}
 
 			<section>
 				{% if evaluations %}
@@ -46,7 +48,7 @@
 						{% endfor %}
 					</ul>
 				{% else %}
-					<p>You have no evaluations.</p>
+					<p>You have not uploaded any evaluations yet.</p>
 				{% endif %}
 			</section>
 		</main>

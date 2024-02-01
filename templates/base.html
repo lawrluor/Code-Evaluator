@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<!-- Not used at the moment -->
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<title>Code Evaluator</title>
+	</head>
+
+	<body>
+		<header>
+			<nav>
+				<a href="/evaluate">Evaluate</a>
+				<i style="float: right" class="small-icon-danger fa fa-sign-out" aria-hidden="true" onclick="window.location.href='/logout'"></i>
+			</nav>
+
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					<ul>
+					{% for message in messages %}
+						<li>{{ message }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			{% endwith %}
+		</header>
+
+		{% block content %}
+		{% endblock %}
+	</body>
+</html>

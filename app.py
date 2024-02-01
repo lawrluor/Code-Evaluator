@@ -7,9 +7,6 @@ import os
 import json
 import openai
 from dotenv import load_dotenv
-
-from datetime import datetime
-
 load_dotenv()
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -55,6 +52,26 @@ def load_user(user_id):
     # LegacyAPIWarning: The Query.get() method is considered legacy as of the 1.x series of SQLAlchemy and becomes a legacy construct in 2.0. The method is now available as Session.get() (deprecated since: 2.0) (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
     return User.query.get(int(user_id))
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        passwordRepeat = request.form.get('passwordRepeat')
+
+        user = User.query.filter_by(username=username).first()
+        if user:
+            flash('Username already exists!')
+        elif password != passwordRepeat:
+            flash('Passwords do not match!')
+        else:
+            new_user = User(username=username)
+            new_user.set_password(password)
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+            return redirect(url_for('evaluate'))
+    return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

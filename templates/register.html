@@ -19,16 +19,18 @@
     </header>
 
     <main>
-      <h1>Login</h1>
-      <form method="post" action="/login">
+      <h1>Register</h1>
+      <form method="post" action="/register">
         <label>Username:</label>
         <input type="text" name="username">
         <label>Password:</label>
         <input type="password" name="password">
+				<label>Repeat Password:</label>
+        <input type="passwordRepeat" name="passwordRepeat">
         <input type="submit" value="Login"></input>
       </form>
 
-      <a href="/register" class="footer-link">Create Account</a>
+			<a href="/login" class="footer-link">Already have an account? Click here to log in</a>
     </main>
   </body>
 </html>
