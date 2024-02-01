@@ -49,7 +49,7 @@ class Analysis(db.Model):
 
 PROMPT = """Analyze the following code as if you are a computer science professor
 whose goal is to identify critical errors in your students\' code.
-Do not add suggestions on adding comments, docstrings, or variable names, or indentation.
+Do not add suggestions on adding comments, docstrings, variable names, formatting, or indentation.
 Make sure to look through the entire file, and only afterwards,
 limit the number of suggestions between 1 and 20 critical issues that you have identified.
 Include all suggestions as a JSON-compatible list of objects each with keys "line": X, "type": Y, "suggestion": Z

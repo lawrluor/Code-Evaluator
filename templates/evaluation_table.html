@@ -2,11 +2,12 @@
 	<h2 style="display: inline">{{ filename }}</h2>
 	{% if id %}<i class="small-icon-danger fa fa-trash" aria-hidden="true" onclick="deleteAlert({{ id }})"></i>{% endif %}
 	{% if timestamp %}<h3>created at: {{ timestamp }}</h3>{% endif %}
+	<h4> {{table_results|length}} suggestions </h4>
 
 	<tbody>
 		{% for suggestion in table_results %}
 			<tr class="highlight-row">
-				<td>{{ loop.index }} Line {{ suggestion['line'] }}: {{ suggestion['type'] }}</td>
+				<td>Line {{ suggestion['line'] }}: {{ suggestion['type'] }}</td>
 			</tr>
 
 			<tr>
