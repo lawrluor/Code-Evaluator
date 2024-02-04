@@ -47,6 +47,15 @@ class Analysis(db.Model):
   filename = db.Column(db.String(255), nullable=False)
   data = db.Column(db.JSON, nullable=False)  # TODO: change to JSONB?
 
+# TODO: There may be ways to optimize the prompt
+# PROMPT = """Analyze the following code as if you are a computer science professor
+# whose goal is to identify critical errors in your students\' code.
+# Do not add suggestions on adding comments, docstrings, variable names, formatting, or indentation.
+# Make sure to look through the entire file.
+# Include the suggestions as a JSON-compatible list of objects each with keys "line": X, "type": Y, "suggestion": Z
+# Limit the final number of suggestions between 1 and 20 critical issues that you have identified.
+# """
+
 PROMPT = """Analyze the following code as if you are a computer science professor
 whose goal is to identify critical errors in your students\' code.
 Do not add suggestions on adding comments, docstrings, variable names, formatting, or indentation.
@@ -106,16 +115,12 @@ def handle_exception(e):
   if type(e) == openai.APIError:
     if e.http_status >= 500:
       flash("The OpenAI API service is temporarily down, please try again later. See https://status.openai.com/")
-    elif e.code == 400:
-      flash("File is too long. Please upload a file with fewer than 4096 tokens.")
+    elif e.code == "context_length_exceeded":
+      flash("One or more of the files is too long. Please upload a file with fewer than 4096 tokens. See https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them")
     elif e.http_status == 429:
       flash("Too many requests have been made to the OpenAI API, please wait a few minutes and try again. See https://help.openai.com/en/articles/6891839-api-error-code-guidance")
     else:
       flash("Error occurred. See https://help.openai.com/en/articles/6891839-api-error-code-guidance")
-  elif e and e.code == "context_length_exceeded":
-    # Confusingly, this is not an openai.APIError. We should handle it separately.
-    # Error code: 400 - {'error': {'message': "This model's maximum context length is 4097 tokens. However, your messages resulted in 39822 tokens. Please reduce the length of the messages.", 'type': 'invalid_request_error', 'param': 'messages', 'code': 'context_length_exceeded'}}
-    flash("File is too long. Please upload a file with fewer than 4096 tokens. See https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them")
   else:
     if e:
       flash(str(e))
@@ -177,8 +182,9 @@ def evaluate():
         data = file.read()
         data = data.decode("utf-8")  # convert bytes to text
 
-        response = client.chat.completions.create(model="gpt-3.5-turbo",
-                                                  temperature=0,
+        # TODO: in the future, there may be ways to give the system prompt once only
+        response = client.chat.completions.create(model="gpt-3.5-turbo-0125",
+                                                  temperature=0.1,
                                                   messages=[
                                                     {
                                                       "role": "system",
@@ -199,6 +205,10 @@ def evaluate():
         # We could also handle the exception so that if we ever run into the issue, we can truncate the message content to the last suggestion.
         # This would be the equivalent of rewinding back until we find the last closing bracket, removing everything after that, and adding a square bracket to close the list
 
+        # NOTE: New field called response_format that we can set to JSON object.
+        # response_format={ "type": "json_object" },
+        # This may make sure that the response is always properly formatted and no need to truncate
+        # See more: https://platform.openai.com/docs/guides/text-generation/json-mode
         try:
           data = json.loads(response.choices[0].message.content)
         except json.JSONDecodeError as e:

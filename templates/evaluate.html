@@ -29,11 +29,13 @@
         const resultsTable = document.getElementById('tables-container');
         const errorMessages = document.getElementById('error-messages');
         const uploadForm = document.getElementById('upload-form');
+        const overview = document.getElementById('overview');
 
         uploadForm.addEventListener('submit', function (e) {
           submitButton.disabled = true;
           submitButton.value = 'Uploading & Analyzing Files... this may take several minutes.';
           submitButton.id = 'submit-button-disabled';
+          overview.style.display = 'none';
           resultsTable.style.display = 'none';
           errorMessages.style.display = 'none';
 
@@ -74,11 +76,13 @@
         {% endwith %}
       </section>
 
-      {% if filenames|length == 1 %}
-        <h2>Analyzed 1 file</h2>
-      {% elif filenames|length > 0 %}
-        <h2>Analyzed {{ filenames|length }} files</h2>
-      {% endif %}
+      <section id="overview">
+        {% if filenames|length == 1 %}
+          <h2>Analyzed 1 file</h2>
+        {% elif filenames|length > 0 %}
+          <h2>Analyzed {{ filenames|length }} files</h2>
+        {% endif %}
+      </section>
 
       <section id="tables-container">
         {% for i in range(filenames|length) %}
