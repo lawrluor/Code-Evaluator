@@ -1,10 +1,22 @@
-# AI-Powered Automated Code Analysis Engine
+# Lightweight Automated Code Analysis Engine
 
 #### Client: Educational Institution (Private)
 
 #### Stack: React, Python (Flask), OpenAI API, Docker, PostgreSQL
 
-This tool was built as a lightweight, scrappy alternative to enterprise solutions like CodeGrade. The platform was designed to help a group of professors automate the labor-intensive process of code review. Developed between January and February 2024, the system was a "cutting-edge" implementation of LLM-based analysis, providing professors with an admin-focused dashboard to organize, execute, and analyze student submissions grouped by classroom and assignment.
+This tool was built as a lightweight, scrappy alternative to enterprise solutions like CodeGrade. The platform was commissioned by a professor/department to research  solutions to automate code review. Developed between January and February 2024, the system was a "cutting-edge" implementation of LLM-based analysis, providing professors with an admin-focused dashboard to organize, execute, and analyze student submissions grouped by classroom and assignment.
+
+## Features
+
+- Full-Stack Flask Architecture: Uses Flask for the backend and HTML with Jinja2 templates for the frontend. The system handles the entire lifecycle of an evaluation, from initial file upload to the final display of AI-generated reports.
+
+- Relational Database Persistence: Implements Flask-SQLAlchemy to manage the data layer. Models store metadata for each evaluation, ensuring that a professor can revisit and re-analyze past student submissions.
+
+- Secure File Handling: Utilizes Werkzeug to manage file uploads securely, ensuring that student submissions are properly saved to the server’s filesystem and associated with the correct database records.
+
+- Administrative Dashboard: A centralized "Evaluations" view allows the user to browse through a history of all analyzed work, providing a high-level overview of student performance and submission status.
+
+- Lightweight Local-First Design: Engineered as a "plug-and-play" tool with minimal dependencies. The tool was designed to be highly portable and accessible for local use-cases, though it could be used in a cloud environment with some modifications.
 
 # USAGE:
 1. run `python3 db_init.py` to generate the SQL database
