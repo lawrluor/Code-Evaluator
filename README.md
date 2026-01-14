@@ -1,3 +1,11 @@
+# AI-Powered Automated Code Analysis Engine
+
+#### Client: Educational Institution (Private)
+
+#### Stack: React, Python (Flask), OpenAI API, Docker, PostgreSQL
+
+This tool was built as a lightweight, scrappy alternative to enterprise solutions like CodeGrade. The platform was designed to help a group of professors automate the labor-intensive process of code review. Developed between January and February 2024, the system was a "cutting-edge" implementation of LLM-based analysis, providing professors with an admin-focused dashboard to organize, execute, and analyze student submissions grouped by classroom and assignment.
+
 # USAGE:
 1. run `python3 db_init.py` to generate the SQL database
 2. `python3 app.py` or `gunicorn -b 0.0.0.0:8000 app:app` to run the app
