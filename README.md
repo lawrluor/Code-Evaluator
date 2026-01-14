@@ -1,8 +1,8 @@
-# Lightweight Automated Code Analysis Engine
+# Automated Code Analysis Engine
 
 #### Client: Educational Institution (Private)
 
-#### Stack: React, Python (Flask), OpenAI API, Docker, PostgreSQL
+#### Stack: Flask, SQLAlchemy, Jinja, OpenAI API
 
 This tool was built as a lightweight, scrappy alternative to enterprise solutions like CodeGrade. The platform was commissioned by a professor/department to research  solutions to automate code review. Developed between January and February 2024, the system was a "cutting-edge" implementation of LLM-based analysis, providing professors with an admin-focused dashboard to organize, execute, and analyze student submissions grouped by classroom and assignment.
 
